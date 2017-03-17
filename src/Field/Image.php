@@ -199,6 +199,10 @@ class Image extends BasicField implements FieldInterface
     protected function getS3Url()
     {
         $amazonS3_info = $this->fetchCustomMetadataValues('amazonS3_info');
-        return 'https://s3-' . $amazonS3_info['region'] . '.amazonaws.com/' . $amazonS3_info['bucket'] . '/' . $amazonS3_info['key'];
+        if ($amazonS3_info) {
+            return 'https://s3-' . $amazonS3_info['region'] . '.amazonaws.com/' . $amazonS3_info['bucket'] . '/' . $amazonS3_info['key'];
+        }
+
+        return $this->url;
     }
 }
