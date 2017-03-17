@@ -64,14 +64,14 @@ class Image extends BasicField implements FieldInterface
     public function process($field)
     {
         $attachmentId = $this->fetchValue($field);
-           
+
         $connection = $this->post->getConnectionName();
-        
+
         if ($attachment = Post::on($connection)->find(intval($attachmentId))) {
             $this->fillFields($attachment);
 
             $imageData = $this->fetchMetadataValue($attachment);
-        
+
             $this->fillMetadataFields($imageData);
         }
     }
@@ -93,6 +93,7 @@ class Image extends BasicField implements FieldInterface
         $this->url = $attachment->guid;
         $this->description = $attachment->post_excerpt;
         $this->attachment = $attachment;
+        $this->s3Url = $this->getS3Url();
     }
 
     /**
@@ -193,5 +194,11 @@ class Image extends BasicField implements FieldInterface
         }
 
         return $customMetaValues;
+    }
+
+    protected function getS3Url()
+    {
+        $amazonS3_info = $this->fetchCustomMetadataValues('amazonS3_info');
+        return 'https://s3-' . $amazonS3_info['region'] . '.amazonaws.com/' . $amazonS3_info['bucket'] . '/' . $amazonS3_info['key'];
     }
 }
