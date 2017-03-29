@@ -121,7 +121,7 @@ abstract class BasicField
             $fieldKey = 'field_' . $fieldKeyIds[3];
         }
 
-        $post = $this->post->orWhere(function ($query) use ($fieldKey) {
+        $post = Post::where(function ($query) use ($fieldKey) {
             $query->where('post_name', $fieldKey);
             $query->where('post_type', 'acf-field');
         })->first();
